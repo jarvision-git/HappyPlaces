@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimaryDark">#2a4d69</color>
+    <color name="colorAccent">#adcbe3</color>
+    <color name="colorPrimary">#4b86b4</color>
+
+
+    <!--#2a4d69 • #4b86b4 • #adcbe3 • #e7eff6 • #63ace5-->
+    <style name="CustomNoActionBarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+    </style>
+
+
+    <style name="CustonToolBarStyle">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:colorControlNormal">#FFFFFF</item>
+
+    </style>
+</resources>
