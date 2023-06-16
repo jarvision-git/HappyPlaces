@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="editText">10sp</dimen>
+    <dimen name="editTextSize">16sp</dimen>
+    <dimen name="AddImageBtnMarginTop">65sp</dimen>
+    <dimen name="saveBtnMargin">10sp</dimen>
+    <dimen name="EditTextHeight">48dp</dimen>
+    <dimen name="imgViewWidth">200dp</dimen>
+    <dimen name="imgViewHeight">200dp</dimen>
+    <dimen name="BtnAddImgWidth">200dp</dimen>
+    <dimen name="BtnAddImgHeight">50dp</dimen>
+    <dimen name="btnSaveTextSize">20sp</dimen>
 </resources>

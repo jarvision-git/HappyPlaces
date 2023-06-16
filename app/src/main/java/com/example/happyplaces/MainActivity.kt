@@ -7,13 +7,14 @@ import com.example.happyplaces.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.fabAddHappyPlace.setOnClickListener {
-            val intnet=Intent(this,addActivity::class.java)
+            val intent=Intent(this,addActivity::class.java)
             startActivity(intent)
 
         }
