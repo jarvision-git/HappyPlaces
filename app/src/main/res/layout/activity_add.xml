@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addActivity">
+    tools:context=".activities.addActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/addToolbar"
@@ -86,12 +86,14 @@
             >
             
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivAddImage"
                 android:layout_width="@dimen/imgViewWidth"
                 android:layout_height="@dimen/imgViewHeight"
                 android:scaleType="centerCrop"
                 android:src="@drawable/baseline_image_24"/>
 
             <Button
+                android:id="@+id/btnAddImg"
                 android:layout_width="@dimen/BtnAddImgWidth"
                 android:layout_height="@dimen/BtnAddImgHeight"
                 android:layout_marginTop="@dimen/AddImageBtnMarginTop"
