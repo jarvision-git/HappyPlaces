@@ -25,6 +25,7 @@
             android:layout_margin="@dimen/editText"
             >
            <androidx.appcompat.widget.AppCompatEditText
+               android:id="@+id/etTitle"
                android:layout_width="match_parent"
                android:layout_height="@dimen/EditTextHeight"
                android:hint="@string/title"
@@ -39,6 +40,7 @@
             android:layout_margin="@dimen/editText"
             >
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etDescription"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/EditTextHeight"
                 android:hint="@string/Description"
@@ -71,6 +73,7 @@
             android:layout_margin="@dimen/editText"
             >
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etLocation"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/EditTextHeight"
                 android:hint="@string/Location"
@@ -104,6 +107,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/saveBtnMargin"
