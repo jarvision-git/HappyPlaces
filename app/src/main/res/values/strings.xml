@@ -6,4 +6,5 @@
     <string name="addImage">ADD IMAGE</string>
     <string name="save">SAVE</string>
     <string name="title">Title</string>
+    <string name="No_records_available_yet">No records available yet</string>
 </resources>

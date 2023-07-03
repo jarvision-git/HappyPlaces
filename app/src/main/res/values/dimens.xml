@@ -11,4 +11,11 @@
     <dimen name="BtnAddImgWidth">200dp</dimen>
     <dimen name="BtnAddImgHeight">50dp</dimen>
     <dimen name="btnSaveTextSize">20sp</dimen>
+    <dimen name="tvText">25sp</dimen>
+    <dimen name="cvMarginStartEnd">8dp</dimen>
+    <dimen name="cvCornerRadius">3dp</dimen>
+    <dimen name="cvElevation">3dp</dimen>
+    <dimen name="cvPadding">5dp</dimen>
+    <dimen name="civWidthHeight">70dp</dimen>
+    <dimen name="hpMarginStartEnd">3dp</dimen>
 </resources>

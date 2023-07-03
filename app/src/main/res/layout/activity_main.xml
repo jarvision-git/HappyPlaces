@@ -6,6 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:listitem="@layout/item"/>
+
+    <TextView
+        android:id="@+id/tvNoRecord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/No_records_available_yet"
+        android:textSize="@dimen/tvText"
+        android:textStyle="bold"
+        android:textColor="#1670B8"
+        android:layout_marginTop="300sp"
+        android:visibility="visible"
+        tools:visibility="visible"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddHappyPlace"
         android:layout_width="wrap_content"

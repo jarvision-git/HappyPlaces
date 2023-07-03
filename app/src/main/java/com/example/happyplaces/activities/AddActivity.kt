@@ -1,6 +1,7 @@
 package com.example.happyplaces.activities
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.ImageDecoder
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -17,10 +18,13 @@ import com.example.happyplaces.database.HappyPlaceApplication
 import com.example.happyplaces.database.HappyPlaceDao
 import com.example.happyplaces.databinding.ActivityAddBinding
 import com.example.happyplaces.models.HappyPlaceModel
+
+
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+
 
 class addActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -37,6 +41,8 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
         // photo picker.
         if (uri != null) {
             Log.d("PhotoPicker", "Selected URI: $uri")
+            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            this.contentResolver.takePersistableUriPermission(uri, flag)
             saveImageToInternalStorage=uri
             val source = ImageDecoder.createSource(this.contentResolver, uri)
             val bitmap = ImageDecoder.decodeBitmap(source)
