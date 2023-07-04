@@ -12,6 +12,8 @@ class HappyPlaceAdapter(private val items:ArrayList<HappyPlaceModel>):RecyclerVi
 
 //    private var onClickListener:OnClickListener?=null
 
+    var onItemClick: ((HappyPlaceModel) -> Unit)? = null
+
 
 
     inner class ViewHolder(binding: ItemBinding):RecyclerView.ViewHolder(binding.root) {
@@ -19,7 +21,11 @@ class HappyPlaceAdapter(private val items:ArrayList<HappyPlaceModel>):RecyclerVi
         val desc=binding.tvDesc
         val image= binding.civPlaceImage
 
-
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(items[adapterPosition])
+            }
+        }
 
     }
 

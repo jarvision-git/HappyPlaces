@@ -62,11 +62,12 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(binding.addToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
         val callback = object : OnBackPressedCallback(
             true // default to enabled
         ) {
             override fun handleOnBackPressed() {
-                finish()
+                this@addActivity.finish()
             }
         }
         onBackPressedDispatcher.addCallback(

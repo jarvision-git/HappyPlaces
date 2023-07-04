@@ -57,6 +57,19 @@ class MainActivity : AppCompatActivity() {
 
             Toast.makeText(applicationContext,"Record shown", Toast.LENGTH_LONG).show()
 
+            itemAdapter.onItemClick = { model ->
+
+                // do something with your item
+                Log.d("TAG", model.description)
+                val intent=Intent(this@MainActivity,HappyPlaceDetailActivity::class.java)
+//                val bundle = Bundle()
+//                bundle.putString("image",contact.image)
+//                bundle.putString("desc",contact.description)
+//                bundle.putString("location",contact.location)
+//                intent.putExtras(bundle)
+                intent.putExtra(EXTRA_PLACE_DETAILS,model)
+                startActivity(intent)
+            }
 
         }
         else{
@@ -65,4 +78,9 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    companion object{
+        internal const val EXTRA_PLACE_DETAILS = "extra_place_details"
+    }
 }
+
