@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class HappyPlaceModel(
-    @PrimaryKey val id:Int,
+    @PrimaryKey(autoGenerate = true) val id:Int,
     val title:String,
     val image:String,
     val description:String,

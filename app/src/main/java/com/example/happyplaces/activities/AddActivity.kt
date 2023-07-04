@@ -110,6 +110,7 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
                 lifecycleScope.launch{
                     HappyPlaceDao.insertHappyPlace(happyPlaceModel)
                     Toast.makeText(applicationContext,"Record Saved",Toast.LENGTH_LONG).show()
+                    finish( )
                 }
 
 
