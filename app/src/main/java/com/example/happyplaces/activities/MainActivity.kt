@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupDataInRecyclerView(happyPlaceList:ArrayList<HappyPlaceModel>,happyPlaceDao:HappyPlaceDao) {
         if(happyPlaceList.isNotEmpty())
         {
+
             val itemAdapter=HappyPlaceAdapter(happyPlaceList)
 
             binding.rvMain.layoutManager = LinearLayoutManager(this)  //important to view recyclerview
@@ -55,6 +56,8 @@ class MainActivity : AppCompatActivity() {
             binding.tvNoRecord.visibility=View.GONE
 
             Toast.makeText(applicationContext,"Record shown", Toast.LENGTH_LONG).show()
+
+
         }
         else{
             binding.rvMain.visibility= View.GONE

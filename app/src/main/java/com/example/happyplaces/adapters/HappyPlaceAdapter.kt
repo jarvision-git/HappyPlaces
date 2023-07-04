@@ -2,6 +2,7 @@ package com.example.happyplaces.adapters
 
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.happyplaces.databinding.ItemBinding
@@ -9,10 +10,17 @@ import com.example.happyplaces.models.HappyPlaceModel
 
 class HappyPlaceAdapter(private val items:ArrayList<HappyPlaceModel>):RecyclerView.Adapter<HappyPlaceAdapter.ViewHolder>() {
 
-    class ViewHolder(binding: ItemBinding):RecyclerView.ViewHolder(binding.root) {
+//    private var onClickListener:OnClickListener?=null
+
+
+
+    inner class ViewHolder(binding: ItemBinding):RecyclerView.ViewHolder(binding.root) {
         val namee=binding.tvName
         val desc=binding.tvDesc
         val image= binding.civPlaceImage
+
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,4 +39,11 @@ class HappyPlaceAdapter(private val items:ArrayList<HappyPlaceModel>):RecyclerVi
         holder.image.setImageURI(Uri.parse(item.image))
     }
 
+//    fun setOnClickListener(onClickListener: OnClickListener) {
+//        this.onClickListener = onClickListener
+//    }
+//
+//    interface OnClickListener {
+//        fun onClick(position: Int, model: HappyPlaceModel)
+//    }
 }
