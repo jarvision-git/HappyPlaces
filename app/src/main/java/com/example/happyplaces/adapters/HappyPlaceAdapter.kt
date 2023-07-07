@@ -50,6 +50,14 @@ class HappyPlaceAdapter(private val context: Context, private val items:ArrayLis
         notifyItemChanged(position)
     }
 
+    fun notifyDeleteItem(activity:Activity,position: Int,requestCode:Int):HappyPlaceModel{
+        val intent=Intent(context, addActivity::class.java)
+//        intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS,items[position])
+//        activity.startActivityForResult(intent,requestCode)
+        return items[position]
+        notifyItemChanged(position)
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val context=holder.itemView.context
         val item=items[position]

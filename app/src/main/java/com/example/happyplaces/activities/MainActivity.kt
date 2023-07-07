@@ -15,6 +15,7 @@ import com.example.happyplaces.database.HappyPlaceApplication
 import com.example.happyplaces.database.HappyPlaceDao
 import com.example.happyplaces.databinding.ActivityMainBinding
 import com.example.happyplaces.models.HappyPlaceModel
+import com.example.happyplaces.util.SwipeToDeleteCallback
 import com.example.happyplaces.util.SwipeToEditCallback
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -90,9 +91,31 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-
         val editItemTouchHelper=ItemTouchHelper(editSwipeHandler)
         editItemTouchHelper.attachToRecyclerView(binding.rvMain)
+
+        val deleteSwipeHandler = object : SwipeToDeleteCallback(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = binding.rvMain.adapter as HappyPlaceAdapter
+                val delModel:HappyPlaceModel
+                delModel=adapter.notifyDeleteItem(
+                    this@MainActivity,
+                    viewHolder.adapterPosition,
+                    ADD_PLACE_ACTIVITY_REQUEST_CODE
+                )
+                lifecycleScope.launch{
+                    happyPlaceDao.deleteHappyPlace(delModel)
+
+                    Toast.makeText(
+                        applicationContext, "Record deleted successfully.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+            }
+        }
+        val deleteSwipeTouchHelper=ItemTouchHelper(deleteSwipeHandler)
+        deleteSwipeTouchHelper.attachToRecyclerView(binding.rvMain)
 
     }
 
