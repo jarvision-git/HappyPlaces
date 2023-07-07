@@ -7,12 +7,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.happyplaces.adapters.HappyPlaceAdapter
 import com.example.happyplaces.database.HappyPlaceApplication
 import com.example.happyplaces.database.HappyPlaceDao
 import com.example.happyplaces.databinding.ActivityMainBinding
 import com.example.happyplaces.models.HappyPlaceModel
+import com.example.happyplaces.util.SwipeToEditCallback
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -48,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         if(happyPlaceList.isNotEmpty())
         {
 
-            val itemAdapter=HappyPlaceAdapter(happyPlaceList)
+            val itemAdapter=HappyPlaceAdapter(this,happyPlaceList)
 
             binding.rvMain.layoutManager = LinearLayoutManager(this)  //important to view recyclerview
             binding.rvMain.adapter=itemAdapter
@@ -60,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             itemAdapter.onItemClick = { model ->
 
                 // do something with your item
-                Log.d("TAG", model.description)
+//                Log.d("TAG", "${model.description}")
                 val intent=Intent(this@MainActivity,HappyPlaceDetailActivity::class.java)
 //                val bundle = Bundle()
 //                bundle.putString("image",contact.image)
@@ -77,9 +80,25 @@ class MainActivity : AppCompatActivity() {
             binding.tvNoRecord.visibility=View.VISIBLE
         }
 
+        val editSwipeHandler = object : SwipeToEditCallback(this) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = binding.rvMain.adapter as HappyPlaceAdapter
+                adapter.notifyEditItem(
+                    this@MainActivity,
+                    viewHolder.adapterPosition,
+                    ADD_PLACE_ACTIVITY_REQUEST_CODE
+                )
+            }
+        }
+
+        val editItemTouchHelper=ItemTouchHelper(editSwipeHandler)
+        editItemTouchHelper.attachToRecyclerView(binding.rvMain)
+
     }
 
     companion object{
+        private const val ADD_PLACE_ACTIVITY_REQUEST_CODE = 1
+
         internal const val EXTRA_PLACE_DETAILS = "extra_place_details"
     }
 }

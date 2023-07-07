@@ -34,6 +34,9 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
     private var mLongitude:Double=0.0
     private var saveImageToInternalStorage: Uri?=null
 
+    private var mHappyPlaceDetails: HappyPlaceModel?=null
+    var id=0
+
 
     private lateinit var dateSetListener:DatePickerDialog.OnDateSetListener
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -55,6 +58,11 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding=ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if(intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS))
+        {
+            mHappyPlaceDetails=intent.getSerializableExtra(MainActivity.EXTRA_PLACE_DETAILS)as HappyPlaceModel
+        }
 
         val HappyPlaceDao=(application as HappyPlaceApplication).db.dao()
 
@@ -84,6 +92,22 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
             updateDateInView()
         }
         updateDateInView() // gonna fill date on its own
+
+        if (mHappyPlaceDetails!=null)
+        {
+            supportActionBar?.title="Edit Happy Place"
+            binding.etTitle.setText(mHappyPlaceDetails!!.title)
+            binding.etDescription.setText(mHappyPlaceDetails!!.description)
+            binding.etDate.setText(mHappyPlaceDetails!!.date)
+            binding.etLocation.setText(mHappyPlaceDetails!!.location)
+            mLatitude=mHappyPlaceDetails!!.latitude
+            mLongitude=mHappyPlaceDetails!!.longitude
+            id=mHappyPlaceDetails!!.id
+
+
+            saveImageToInternalStorage=Uri.parse(mHappyPlaceDetails!!.image)
+            binding.ivAddImage.setImageURI(saveImageToInternalStorage)
+        }
         binding.etDate.setOnClickListener(this)
         binding.btnAddImg.setOnClickListener(this)
         binding.btnSave.setOnClickListener {
@@ -102,7 +126,11 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this, "Please Enter an Image",Toast.LENGTH_SHORT).show()
             }
             else->{
-                val happyPlaceModel=HappyPlaceModel(0,binding.etTitle.text.toString(),
+//                if (mHappyPlaceDetails==null)
+//                {
+//                    id=0
+//                }
+                val happyPlaceModel=HappyPlaceModel(id,binding.etTitle.text.toString(),
                     saveImageToInternalStorage.toString(),
                     binding.etDescription.text.toString(),
                     binding.etDate.text.toString(),
@@ -113,6 +141,7 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
                     Toast.makeText(applicationContext,"Record Saved",Toast.LENGTH_LONG).show()
                     finish( )
                 }
+//                mHappyPlaceDetails=null
 
 
             }

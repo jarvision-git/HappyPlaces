@@ -15,6 +15,8 @@ class HappyPlaceDetailActivity : AppCompatActivity() {
         binding=ActivityHappyPlaceDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
         var happyplacedetailmodel:HappyPlaceModel?=null
 
         if(intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS))

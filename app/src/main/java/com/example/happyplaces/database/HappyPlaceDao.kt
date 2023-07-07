@@ -2,16 +2,16 @@ package com.example.happyplaces.database
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import com.example.happyplaces.models.HappyPlaceModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HappyPlaceDao {
 
-    @Insert(onConflict = OnConflictStrategy.NONE)
+    @Upsert
     suspend fun insertHappyPlace(happyPlaceModel:HappyPlaceModel)
 
     @Delete

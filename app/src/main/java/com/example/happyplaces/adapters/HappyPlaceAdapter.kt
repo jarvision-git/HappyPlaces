@@ -1,14 +1,20 @@
 package com.example.happyplaces.adapters
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.happyplaces.activities.MainActivity
+import com.example.happyplaces.activities.addActivity
 import com.example.happyplaces.databinding.ItemBinding
 import com.example.happyplaces.models.HappyPlaceModel
 
-class HappyPlaceAdapter(private val items:ArrayList<HappyPlaceModel>):RecyclerView.Adapter<HappyPlaceAdapter.ViewHolder>() {
+
+class HappyPlaceAdapter(private val context: Context, private val items:ArrayList<HappyPlaceModel>):RecyclerView.Adapter<HappyPlaceAdapter.ViewHolder>() {
 
 //    private var onClickListener:OnClickListener?=null
 
@@ -21,7 +27,7 @@ class HappyPlaceAdapter(private val items:ArrayList<HappyPlaceModel>):RecyclerVi
         val desc=binding.tvDesc
         val image= binding.civPlaceImage
 
-        init {
+        init {      //inner class important to implement this
             itemView.setOnClickListener {
                 onItemClick?.invoke(items[adapterPosition])
             }
@@ -35,6 +41,13 @@ class HappyPlaceAdapter(private val items:ArrayList<HappyPlaceModel>):RecyclerVi
 
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    fun notifyEditItem(activity:Activity,position: Int,requestCode:Int){
+        val intent=Intent(context, addActivity::class.java)
+        intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS,items[position])
+        activity.startActivityForResult(intent,requestCode)
+        notifyItemChanged(position)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
