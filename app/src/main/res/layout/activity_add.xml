@@ -74,6 +74,8 @@
             >
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etLocation"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/EditTextHeight"
                 android:hint="@string/Location"

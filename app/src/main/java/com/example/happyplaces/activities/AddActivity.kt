@@ -1,5 +1,6 @@
 package com.example.happyplaces.activities
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.ImageDecoder
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +20,10 @@ import com.example.happyplaces.database.HappyPlaceApplication
 import com.example.happyplaces.database.HappyPlaceDao
 import com.example.happyplaces.databinding.ActivityAddBinding
 import com.example.happyplaces.models.HappyPlaceModel
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
 
 import kotlinx.coroutines.launch
@@ -58,6 +64,11 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding=ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if(!Places.isInitialized()){
+            Places.initialize(this@addActivity,resources.getString(R.string.google_maps_api_key))
+
+        }
 
         if(intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS))
         {
@@ -110,6 +121,7 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
         }
         binding.etDate.setOnClickListener(this)
         binding.btnAddImg.setOnClickListener(this)
+        binding.etLocation.setOnClickListener(this)
         binding.btnSave.setOnClickListener {
             when {
 
@@ -163,48 +175,25 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
                 launch()
 
             }
-            R.id.btnSave->{
-//                when {
-//                    binding.etTitle.text.isNullOrEmpty() -> {
-//                        Toast.makeText(this, "Please Enter Title",Toast.LENGTH_SHORT).show()
-//                    }
-//                    binding.etDescription.text.isNullOrEmpty() -> {
-//                        Toast.makeText(this, "Please Enter Description",Toast.LENGTH_SHORT).show()
-//                    }
-//                    binding.etLocation.text.isNullOrEmpty() -> {
-//                        Toast.makeText(this, "Please Enter Location",Toast.LENGTH_SHORT).show()
-//                    }
-//                    saveImageToInternalStorage==null -> {
-//                        Toast.makeText(this, "Please Enter an Image",Toast.LENGTH_SHORT).show()
-//                    }
-//                    else->{
-//                        val happyPlaceModel=HappyPlaceModel(0,binding.etTitle.text.toString(),
-//                            saveImageToInternalStorage.toString(),
-//                            binding.etDescription.text.toString(),
-//                            binding.etDate.text.toString(),
-//                            binding.etLocation.text.toString(),
-//                            mLatitude,mLongitude)
-////                        val dbHandler=DatabaseHandler(this)
-////                        val addHappyPlaceResult=dbHandler.addHappyPlace(happyPlaceModel)
-//
-////                        if(addHappyPlaceResult>0)
-////                        {
-////                            Toast.makeText(this,"The Details have been successfully inserted",Toast.LENGTH_SHORT).show()
-////                            finish()
-////                        }
-////                        else
-////                        {
-////                            Log.e("Database","$addHappyPlaceResult")
-////                        }
-//
-//                        lifecycleScope.launch{
-//                            HappyPlaceDao.insertHappyPlace(happyPlaceModel)
-//                            Toast.makeText(applicationContext,"Record Saved",Toast.LENGTH_LONG).show()
-//                        }
-//
-//
-//                    }
-//                }
+            R.id.etLocation->{
+                try {
+                    // These are the list of fields which we required is passed
+                    val fields = listOf(
+                        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG,
+                        Place.Field.ADDRESS
+                    )
+                    // Start the autocomplete intent with a unique request code.
+                    val intent =
+                        Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                            .build(this@addActivity)
+                    startAutocomplete.launch(intent);
+
+
+                }catch (e:Exception)
+                {
+                    e.printStackTrace()
+                }
+
             }
         }
 
@@ -219,6 +208,32 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
         val myFormat="dd.MM.yyyy"
         val sdf=SimpleDateFormat(myFormat, Locale.getDefault())
         binding.etDate.setText(sdf.format(cal.time).toString())
+    }
+
+
+
+    private val startAutocomplete =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                if (intent != null) {
+                    val place = Autocomplete.getPlaceFromIntent(intent)
+                    mLongitude=place.latLng.longitude
+                    mLatitude=place.latLng.latitude
+                    Log.i(
+                        "place details:", "Place: ${place.name}, ${place.id}"
+                    )
+                    binding.etLocation.setText(place.address)
+                }
+            } else if (result.resultCode == Activity.RESULT_CANCELED) {
+                // The user canceled the operation.
+                Log.i("place details:", "User canceled autocomplete")
+            }
+        }
+
+
+    companion object{
+        private const val PLACE_AUTOCOMPLETE_REQUEST_CODE=3
     }
 
 
