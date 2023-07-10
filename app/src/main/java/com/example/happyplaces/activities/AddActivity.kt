@@ -1,30 +1,41 @@
 package com.example.happyplaces.activities
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.ImageDecoder
 import android.location.LocationManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.happyplaces.R
 import com.example.happyplaces.database.HappyPlaceApplication
 import com.example.happyplaces.database.HappyPlaceDao
 import com.example.happyplaces.databinding.ActivityAddBinding
 import com.example.happyplaces.models.HappyPlaceModel
+import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.PlaceLikelihood
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
@@ -36,6 +47,8 @@ import java.util.Locale
 
 
 class addActivity : AppCompatActivity(), View.OnClickListener {
+    private lateinit var placesClient: PlacesClient
+    private lateinit var responseView: TextView
 
     private lateinit var binding:ActivityAddBinding
     private var cal=Calendar.getInstance()
@@ -68,6 +81,24 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
         binding=ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        placesClient = Places.createClient(this)
+
+
+        val locationPermissionRequest = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                    // Precise location access granted.
+                }
+                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                    // Only approximate location access granted.
+                } else -> {
+                // No location access granted.
+            }
+            }
+        }
+
         if(!Places.isInitialized()){
             Places.initialize(this@addActivity,resources.getString(R.string.google_maps_api_key))
 
@@ -96,6 +127,60 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
             this, // LifecycleOwner
             callback
         )
+
+        binding.btnLocation.setOnClickListener {
+
+// Use fields to define the data types to return.
+            val placeFields: List<Place.Field> = listOf(Place.Field.NAME,Place.Field.LAT_LNG)
+
+// Use the builder to create a FindCurrentPlaceRequest.
+            val request: FindCurrentPlaceRequest = FindCurrentPlaceRequest.newInstance(placeFields)
+
+// Call findCurrentPlace and handle the response (first check that the user has granted permission).
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+                val placeResponse = placesClient.findCurrentPlace(request)
+                placeResponse.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val response = task.result
+                        for (placeLikelihood: PlaceLikelihood in response?.placeLikelihoods ?: emptyList()) {
+
+                                Log.i(
+                                    "current latitude",
+                                    "Place '${placeLikelihood.place.latLng.latitude}'"
+                                )
+                                Log.i(
+                                    "current Longitude",
+                                    "Place '${placeLikelihood.place.latLng.longitude}'"
+                                )
+                                binding.etLocation.setText(placeLikelihood.place.name)
+                                mLatitude = placeLikelihood.place.latLng.latitude
+                                mLongitude = placeLikelihood.place.latLng.longitude
+                                break
+                        }
+
+                    } else {
+                        val exception = task.exception
+                        if (exception is ApiException) {
+                            Log.e("Location Status", "Place not found: ${exception.statusCode}")
+                        }
+                    }
+                }
+            } else {
+                Log.e("Location Status", "Permission not found")
+
+// Before you perform the actual permission request, check whether your app
+// already has the permissions, and whether your app needs to show a permission
+// rationale dialog. For more details, see Request permissions.
+                locationPermissionRequest.launch(arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION))
+
+            }
+
+
+        }
 
 
 
@@ -204,12 +289,7 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
     private fun launch() {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
-//
-//    private fun isLocationEnabled():Boolean{
-//        val locationManager:LocationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER )||locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-//    }
-//
+
 
 
     private fun updateDateInView(){
@@ -242,6 +322,7 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object{
         private const val PLACE_AUTOCOMPLETE_REQUEST_CODE=3
+        private const val PERMISSION_REQUEST_CODE = 9
     }
 
 
