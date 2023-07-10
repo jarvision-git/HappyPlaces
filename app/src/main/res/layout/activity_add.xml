@@ -83,12 +83,18 @@
                 android:textSize="@dimen/editTextSize"
                 />
         </com.google.android.material.textfield.TextInputLayout>
-        
+        <Button
+            android:id="@+id/btnLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SELECT CURRENT LOCATION"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
             
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivAddImage"
@@ -117,7 +123,7 @@
             android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="@dimen/btnSaveTextSize"
-            android:backgroundTint="@color/colorAccent"/>
+            android:backgroundTint="@color/colorPrimaryDark"/>
 
 
     </LinearLayout>

@@ -2,8 +2,10 @@ package com.example.happyplaces.activities
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.ImageDecoder
+import android.location.LocationManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,6 +24,7 @@ import com.example.happyplaces.databinding.ActivityAddBinding
 import com.example.happyplaces.models.HappyPlaceModel
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
@@ -162,7 +165,6 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
         }
 
 
-
     }
 
 
@@ -202,6 +204,12 @@ class addActivity : AppCompatActivity(), View.OnClickListener {
     private fun launch() {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
+//
+//    private fun isLocationEnabled():Boolean{
+//        val locationManager:LocationManager=getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER )||locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+//    }
+//
 
 
     private fun updateDateInView(){
