@@ -2,6 +2,7 @@ package com.example.happyplaces.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.happyplaces.R
 import com.example.happyplaces.models.HappyPlaceModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -16,8 +17,15 @@ class MapActivity : AppCompatActivity(),OnMapReadyCallback {
 
     private var mHappyPlaceDetail:HappyPlaceModel?=null
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        try{
+            super.onCreate(savedInstanceState)
+
+            setContentView(R.layout.activity_map)
+        }
+        catch (e:Exception) {
+            Log.e("Error report :", "onCreateView", e);
+            throw e;
+        }
 
 
         if(intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)){
